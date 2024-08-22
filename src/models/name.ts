@@ -1,0 +1,7 @@
+export const db = "sync space"
+export const workspaceCollection = "workspace"
+export const documentCollection = "document"
+export const documentOutputCollection = "document_output"
+export const commentCollection = "comment"
+export const notificationCollection = "notification"
+export const documentAttachmentBucket = "document-attachment"

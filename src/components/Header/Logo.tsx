@@ -46,7 +46,7 @@ const SyncSpaceLogo = () => {
         />
       </motion.svg>
       <div style={{ marginLeft: "10px" }}>
-        <AnimatedText text="Sync Space" /> {/* Use the AnimatedText component */}
+        <AnimatedText text="Sync Space" />
       </div>
     </div>
   );
