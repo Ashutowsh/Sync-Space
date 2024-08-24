@@ -1,4 +1,4 @@
-import { Permission } from "node-appwrite";
+import { IndexType, Permission } from "node-appwrite";
 import { documentCollection, db } from "../name";
 import { databases } from "./config";
 
@@ -22,4 +22,33 @@ export default async function createDocumentCollection() {
         databases.createStringAttribute(db, documentCollection, "attachmentId", 100, false),
     ]);
     console.log("Document Attributes Created");
+
+    await Promise.all([
+        databases.createIndex(
+            db, 
+            documentCollection,
+            "title",
+            IndexType.Fulltext,
+            ["title"],
+            ["asc"]
+        ),
+        databases.createIndex(
+            db, 
+            documentCollection,
+            "createdBy",
+            IndexType.Fulltext,
+            ["createdBy"],
+            ["asc"]
+        ),
+        databases.createIndex(
+            db, 
+            documentCollection,
+            "workSpaceId",
+            IndexType.Fulltext,
+            ["workSpaceId"],
+            ["asc"]
+        )
+    ])
+
+    console.log("Doc index done.")
 }

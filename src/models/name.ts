@@ -1,4 +1,4 @@
-export const db = "sync space"
+export const db = "syncspace"
 export const workspaceCollection = "workspace"
 export const documentCollection = "document"
 export const documentOutputCollection = "document_output"

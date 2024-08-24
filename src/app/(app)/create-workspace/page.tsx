@@ -1,23 +1,76 @@
 "use client";
 import React, { useState } from "react";
 import coverPic from "../../../../public/images/coverImage.png";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { SmilePlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import CoverPicker from "@/components/Picker/CoverPicker";
 import EmojiPickerComponent from "@/components/Picker/EmojiPicker";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ID } from "node-appwrite";
+import { databases } from "@/models/server/config";
+import { workspaceCollection, db, documentCollection, documentOutputCollection } from "@/models/name";
+import { useAuth, useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
-type CoverImageType = string | StaticImageData;
 
 function Page() {
-  const [coverImage, setCoverImage] = useState<CoverImageType>(coverPic);
+  const [coverImage, setCoverImage] = useState<any>(coverPic);
   const [name, setName] = useState("");
   const [emoji, setEmoji] = useState<string | undefined>(undefined);
+  const [createDocument, setCreateDocument] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const router = useRouter();
+
+  const { user } = useUser();
+  const { orgId } = useAuth();
 
   const handleSetNewCover = (val: string | undefined) => {
     if (val) {
       setCoverImage(val);
+    }
+  };
+
+  const handleCreateWorkspace = async () => {
+    if (!name) return;
+    setIsLoading(true); // Start loading
+    try {
+
+      const response = await databases.createDocument(db, workspaceCollection, ID.unique(), {
+        title: name,
+        createdBy: user?.primaryEmailAddress?.emailAddress,
+        organizationId: orgId ? String(orgId) : user?.primaryEmailAddress?.emailAddress,
+        emoji: emoji,
+        coverImage: coverImage?.src
+      });
+      console.log("Workspace created:", response);
+
+      if(createDocument){
+        console.log(documentCollection)
+        const responseDocument = await databases.createDocument(db, documentCollection, ID.unique(), {
+          createdBy : user?.primaryEmailAddress?.emailAddress,
+          workSpaceId : response.$id,
+          title : "Untitled Document",
+          emoji : emoji
+        })
+
+        console.log("Untitled Doc created.", responseDocument)
+
+        const responseDocumentOutput = databases.createDocument(db, documentOutputCollection, responseDocument.$id, {
+          documentId : responseDocument.$id,
+          output : []
+        })
+
+        console.log("Untitled Doc Output created.", responseDocumentOutput)
+      }
+
+      router.replace(`/workspaces/${response.$id}`);
+      
+    } catch (error) {
+      console.error("Failed to create workspace:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -52,16 +105,41 @@ function Page() {
           </h2>
           <div className="mt-8 flex gap-3 items-center">
             <EmojiPickerComponent setEmojiIcon={(val) => setEmoji(val)}>
-              <Button variant="outline">{emoji ? emoji : <SmilePlus />}</Button>
+              <Button variant="outline">
+                {emoji ? emoji : <SmilePlus />}
+              </Button>
             </EmojiPickerComponent>
             <Input
               placeholder="Workspace Name"
               onChange={(e) => setName(e.target.value)}
             />
           </div>
+
+          <div className="mt-4">
+            <Checkbox
+              id="createDocument"
+              checked={createDocument}
+              onCheckedChange={(checked) => setCreateDocument(checked === true)}
+            />
+            <label htmlFor="createDocument" className="ml-2 text-sm">
+              Want to create a new untitled document.
+            </label>
+          </div>
+
           <div className="mt-7 flex justify-end gap-6">
-            <Button disabled={!name.length}>Create</Button>
-            <Button variant="outline">Cancel</Button>
+            <Button
+              disabled={!name.length || isLoading}
+              onClick={handleCreateWorkspace}
+            >
+              {isLoading ? (
+                <div className="inline-block w-4 h-4 border-2 border-t-2 border-t-transparent border-blue-500 rounded-full animate-spin"></div>
+              ) : (
+                "Create"
+              )}
+            </Button>
+            <Button variant="outline" disabled={isLoading}>
+              Cancel
+            </Button>
           </div>
         </div>
       </div>

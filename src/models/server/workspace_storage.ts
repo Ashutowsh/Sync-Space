@@ -2,7 +2,7 @@ import { Permission } from "node-appwrite";
 import { workspaceAttachmentBucket } from "../name";
 import { storage } from "./config";
 
-export default async function getOrCreateStorage() {
+export default async function getOrCreateWorkSpaceStorage() {
     try {
         await storage.getBucket(workspaceAttachmentBucket);
         console.log("Storage Connected");

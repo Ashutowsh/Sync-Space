@@ -15,9 +15,8 @@ export default async function getOrCreateDB(){
       //create collections
       await Promise.all([
         createWorkspaceCollection(),
-        createDocumentOutputCollection(),
         createDocumentCollection(),
-
+        createDocumentOutputCollection(),
       ])
       console.log("Collection created")
       console.log("Database connected")
