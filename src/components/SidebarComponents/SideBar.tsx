@@ -8,6 +8,8 @@ import { ID, Models, Query } from 'node-appwrite'
 import DocumentList from './DocumentList'
 import { useUser } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
+import { Progress } from "@/components/ui/progress"
+
 
 function SideBar({params} : {params : {id : string, docId : string}}) {
 
@@ -93,6 +95,12 @@ function SideBar({params} : {params : {id : string, docId : string}}) {
       </div>
 
       <DocumentList documentList={documentList} params={params}/>
+      
+      <div className='absolute bottom-10 w-[85%]'>
+      <Progress value={(documentList.length/8) * 100} className='bg-white'/>
+      <h2 className='text-sm font-light my-2'><strong>{documentList.length}</strong> out of <strong>8</strong> used.</h2>
+      <h2 className='text-sm font-light my-2'>Upgrade your plan for more access.</h2>
+      </div>
     </div>
 
   )

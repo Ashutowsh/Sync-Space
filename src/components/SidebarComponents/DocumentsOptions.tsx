@@ -1,4 +1,4 @@
-import { MoreVerticalIcon } from 'lucide-react'
+import { Link, MoreVerticalIcon, Trash2,FilePen, Copy } from 'lucide-react'
 import React from 'react'
 
 import {
@@ -18,14 +18,16 @@ function DocumentsOptions() {
           <MoreVerticalIcon className='h-4 w-4'/>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem>Rename</DropdownMenuItem>
-          <DropdownMenuItem>Share</DropdownMenuItem>
-          <DropdownMenuItem>Delete</DropdownMenuItem>
-          <DropdownMenuItem>Duplicate</DropdownMenuItem>
+        <DropdownMenuItem className='flex gap-2'> <FilePen className='h-4 w-4'/>Rename</DropdownMenuItem>
+          <DropdownMenuItem className='flex gap-2'> <Link className='h-4 w-4'/>Share</DropdownMenuItem>
+          <DropdownMenuItem className='flex gap-2'> <Copy className='h-4 w-4'/>Duplicate</DropdownMenuItem>
+          <DropdownMenuItem className='flex gap-2 text-red-500'> <Trash2 className='h-4 w-4'/>Delete</DropdownMenuItem>
         </DropdownMenuContent>
+        
       </DropdownMenu>
     </div>
   )
 }
 
 export default DocumentsOptions
+

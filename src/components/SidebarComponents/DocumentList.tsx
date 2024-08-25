@@ -21,6 +21,7 @@ function DocumentList({documentList, params} : DocumentListProps) {
             <div className='flex gap-2 items-center'>
                 {!doc?.emoji && <File />}
                 <h2 className='flex gap-2'>{doc?.emoji} {doc.title}</h2>
+                
             </div>
 
             <DocumentsOptions />
