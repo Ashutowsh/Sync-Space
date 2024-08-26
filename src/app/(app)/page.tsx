@@ -1,6 +1,6 @@
+import NavBar from "@/components/Header/NavBar";
 export default function Home() {
   return (
-    <main>
-    </main>
+    <NavBar />
   );
 }
