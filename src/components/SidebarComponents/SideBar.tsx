@@ -7,6 +7,7 @@ import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { Progress } from "@/components/ui/progress";
 import { useDocumentStore } from '@/store/documentsStore';
+import Link from 'next/link';
 
 function SideBar({ params }: { params: { id: string, docId: string } }) {
   const { user } = useUser();
@@ -33,7 +34,9 @@ function SideBar({ params }: { params: { id: string, docId: string } }) {
   return (
     <div className='h-screen fixed md:w-72 hidden md:block bg-blue-50 p-5 shadow-md'>
       <div className='flex justify-between items-center'>
-        <SyncSpaceLogo />
+        <Link href="/dashboard">
+          <SyncSpaceLogo />
+        </Link>
         <Bell className='h-5 w-5 text-gray-500'/>
       </div>
       <hr className='my-5'/>
