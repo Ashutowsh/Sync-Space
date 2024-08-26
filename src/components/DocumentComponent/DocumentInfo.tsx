@@ -65,7 +65,7 @@ function DocumentInfo({ params }: { params: { id: string; docId: string } }) {
         </div>
       </EmojiPickerComponent>
 
-      <div className='mt-10 p-10'>
+      <div className='mt-10 px-39 py-10 ml-20'>
         <Input
           type='text'
           placeholder='Untitled Document'

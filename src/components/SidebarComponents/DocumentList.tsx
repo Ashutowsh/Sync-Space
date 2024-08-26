@@ -24,6 +24,10 @@ function DocumentList({ params }: DocumentListProps) {
     getDocuments(params.id);
   }, [params.id, getDocuments]);
 
+  useEffect(() => {
+    getDocuments(params.id);
+  }, [params.id, getDocuments]);
+
   const handleDoubleClick = (docId: string, currentTitle: string) => {
     setEditingDocId(docId);
     setNewTitle(currentTitle);
@@ -35,6 +39,12 @@ function DocumentList({ params }: DocumentListProps) {
       setEditingDocId(null);
     }
   };
+
+  const handleDelete = async(docId : string) => {
+    await deleteDocument(docId);
+    // console.log(id);
+    // router.replace(`/workspace/${params.id}/${id}`)
+  }
 
 
   const shareDocument = async (docId: string) => {
@@ -83,7 +93,7 @@ function DocumentList({ params }: DocumentListProps) {
           </div>
           <DocumentsOptions 
             doc={doc} 
-            deleteDocument={deleteDocument} 
+            deleteDocument={handleDelete} 
             renameDocument={handleDoubleClick} 
             shareDocument={shareDocument} 
             duplicateDocument={() => duplicateDocument(doc, 3)}

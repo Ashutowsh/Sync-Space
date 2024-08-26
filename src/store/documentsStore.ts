@@ -35,6 +35,7 @@ export const useDocumentStore = create<DocumentStoreState>((set, get) => ({
 
   deleteDocument: async (docId) => {
     try {
+      let first
       await databases.deleteDocument(db, documentCollection, docId);
       await databases.deleteDocument(db, documentOutputCollection, docId);
       toast('Your document deleted successfully.');
