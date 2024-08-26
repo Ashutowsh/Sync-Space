@@ -12,7 +12,7 @@ function NavBar() {
       <Link href="/dashboard">
         <Logo />
       </Link>
-      <OrganizationSwitcher afterCreateOrganizationUrl={'/dashboard'} afterLeaveOrganizationUrl={'/dashboard'}/>
+      <OrganizationSwitcher afterCreateOrganizationUrl={'/dashboard'} afterLeaveOrganizationUrl={'/dashboard'} afterSelectOrganizationUrl={'/dashboard'} afterSelectPersonalUrl={"/dashboard"}/>
       <UserButton showName />
     </div>
   )

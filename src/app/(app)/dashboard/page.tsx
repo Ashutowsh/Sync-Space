@@ -11,6 +11,7 @@ import WorkSpaceList from '@/components/WorkSpaceComponents/WorkSpaceList';
 import { Query, Models } from 'node-appwrite';
 import { databases } from '@/models/server/config';
 import { db, workspaceCollection } from '@/models/name';
+import Link from 'next/link';
 
 const Dashboard: React.FC = () => {
   const { orgId } = useAuth();
@@ -58,9 +59,7 @@ const Dashboard: React.FC = () => {
         
         <div className='flex justify-between'>
           <h2 className='font-bold text-2xl'>Hello, {user?.fullName}</h2>
-          <Button>
-            +
-          </Button>
+          <Link href="create-workspace"><Button>+</Button></Link>
         </div>
 
         <div className='mt-10 flex justify-between'>
@@ -84,7 +83,7 @@ const Dashboard: React.FC = () => {
               <div className='flex flex-col justify-center items-center my-10'>
                 <Image src={workspaceImage} alt='You have no workspaces.' width={200} height={200} />
                 <h2>Create a Workspace</h2>
-                <Button variant='outline' className='my-3'>+ New WorkSpace</Button>
+                <Link href='/create-workspace'><Button variant='outline' className='my-3'>+ New WorkSpace</Button></Link>
               </div>
             ) : (
               <WorkSpaceList workspaces={workspacesResponse!} />

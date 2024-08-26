@@ -7,21 +7,32 @@ import { useDocumentStore } from '@/store/documentsStore';
 import { SmilePlus } from 'lucide-react';
 import { Input } from '../ui/input';
 import { useDebounceCallback } from 'usehooks-ts';
+import { databases } from '@/models/server/config';
+import { db, documentCollection, workspaceCollection } from '@/models/name';
 
 function DocumentInfo({ params }: { params: { id: string; docId: string } }) {
   const [coverImage, setCoverImage] = useState<any>(coverPic);
   const [emoji, setEmoji] = useState<string | undefined>(undefined);
   const [title, setTitle] = useState<string>('');
-  const { renameDocument, documentList } = useDocumentStore();
+  const { renameDocument, documentList, updateDocumentInDatabase } = useDocumentStore();
   const debouncedRename = useDebounceCallback((newTitle) => {
     if (newTitle) {
       renameDocument(params.docId, newTitle);
+      updateDocumentInDatabase(params.docId, {title : newTitle} );
     }
   }, 100);
 
-  const handleSetNewCover = (val: string | undefined) => {
+  const handleSetNewCover = async (val: string | undefined) => {
     if (val) {
       setCoverImage(val);
+      await updateDocumentInDatabase(params.docId,{ coverImage: val });
+    }
+  };
+
+  const handleEmojiChange = async (val: string | undefined) => {
+    if (val) {
+      setEmoji(val);
+      await updateDocumentInDatabase(params.docId,{ emoji: val });
     }
   };
 
@@ -29,6 +40,8 @@ function DocumentInfo({ params }: { params: { id: string; docId: string } }) {
     const doc = documentList.find(e => e.$id === params.docId);
     if (doc) {
       setTitle(doc.title);
+      setCoverImage(doc.coverImage || coverPic);
+      setEmoji(doc.emoji);
     }
   }, [params.docId, documentList]);
 
@@ -59,9 +72,9 @@ function DocumentInfo({ params }: { params: { id: string; docId: string } }) {
         </div>
       </CoverPicker>
 
-      <EmojiPickerComponent setEmojiIcon={(val) => setEmoji(val)}>
+      <EmojiPickerComponent setEmojiIcon={handleEmojiChange}>
         <div className='absolute ml-10 rounded-md p-4 mt-[-40px] bg-[#ffffffb0] cursor-pointer'>
-          {emoji ? <span className='text-3xl'>{emoji}</span> : <SmilePlus className='h-10 w-10 text-gray-500'/>}
+          {emoji ? <span className='text-3xl'>{emoji}</span> : <SmilePlus className='h-10 w-10 text-gray-500' />}
         </div>
       </EmojiPickerComponent>
 

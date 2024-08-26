@@ -4,7 +4,6 @@ import SideBar from '@/components/SidebarComponents/SideBar';
 import DocumentPage from "@/components/DocumentComponent/DocumentPage";
 
 const Page = ({ params }: { params: { id: string, docId : string } }) => {
-  const docId = params.docId!;
   return (
     <div>
       <div>

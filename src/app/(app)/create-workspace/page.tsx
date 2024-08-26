@@ -29,6 +29,7 @@ function Page() {
 
   const handleSetNewCover = (val: string | undefined) => {
     if (val) {
+      console.log("Image :", val)
       setCoverImage(val);
     }
   };
@@ -43,7 +44,7 @@ function Page() {
         createdBy: user?.primaryEmailAddress?.emailAddress,
         organizationId: orgId ? String(orgId) : user?.primaryEmailAddress?.emailAddress,
         emoji: emoji,
-        coverImage: coverImage?.src
+        coverImage: coverImage
       });
       console.log("Workspace created:", response);
 
@@ -60,7 +61,7 @@ function Page() {
 
         const responseDocumentOutput = databases.createDocument(db, documentOutputCollection, responseDocument.$id, {
           documentId : responseDocument.$id,
-          output : []
+          output : ""
         })
 
         console.log("Untitled Doc Output created.", responseDocumentOutput)

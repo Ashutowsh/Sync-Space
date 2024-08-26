@@ -14,7 +14,7 @@ const WorkSpaceList: React.FC<WorkSpaceListProps> = ({ workspaces }) => {
     return (
       <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6'>
         {workspaces?.documents?.map((workspace) => (
-          <div key={workspace.workSpaceId} className='border shadow-xl rounded- hover:scale-105 transition-all cursor-pointer'
+          <div key={workspace.$id} className='border shadow-xl rounded- hover:scale-105 transition-all cursor-pointer'
           onClick={() => router.replace(`workspace/${workspace.$id}`)}
           >
             <Image src={workspace?.coverImage}

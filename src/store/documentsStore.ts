@@ -12,6 +12,7 @@ interface DocumentStoreState {
   renameDocument: (docId: string, newName: string) => Promise<void>;
   duplicateDocument: (doc: Models.Document, maxLimit : number) => Promise<void>;
   createDocument: (workspaceId: string, createdBy: string, maxLimit: number) => Promise<string | null | undefined>;
+  updateDocumentInDatabase: (docId: string, updates: { title?: string; coverImage?: string; emoji?: string }) => Promise<void>;
 }
 
 export const useDocumentStore = create<DocumentStoreState>((set, get) => ({
@@ -35,7 +36,6 @@ export const useDocumentStore = create<DocumentStoreState>((set, get) => ({
 
   deleteDocument: async (docId) => {
     try {
-      let first
       await databases.deleteDocument(db, documentCollection, docId);
       await databases.deleteDocument(db, documentOutputCollection, docId);
       toast('Your document deleted successfully.');
@@ -137,7 +137,7 @@ export const useDocumentStore = create<DocumentStoreState>((set, get) => ({
 
       const response = await databases.createDocument(db, documentOutputCollection, newDoc.$id, {
         documentId: newDoc.$id,
-        output: [],
+        output: "",
       });
 
       console.log('Untitled Doc Output created.');
@@ -150,4 +150,19 @@ export const useDocumentStore = create<DocumentStoreState>((set, get) => ({
       console.error('Failed to create document:', error);
     }
   },
+
+  updateDocumentInDatabase: async (docId, updates) => {
+    try {
+      await databases.updateDocument(db, documentCollection, docId, updates);
+      set((state) => ({
+        documentList: state.documentList.map((doc) =>
+          doc.$id === docId ? { ...doc, ...updates } : doc
+        ),
+      }));
+    } catch (error) {
+      console.error('Error updating document in database:', error);
+      toast('Error in updating the document.');
+    }
+  },
+
 }));

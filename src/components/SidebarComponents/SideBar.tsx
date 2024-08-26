@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import { Progress } from "@/components/ui/progress";
 import { useDocumentStore } from '@/store/documentsStore';
 import Link from 'next/link';
+import { databases } from '@/models/server/config';
+import { db, workspaceCollection } from '@/models/name';
 
 function SideBar({ params }: { params: { id: string, docId: string } }) {
   const { user } = useUser();
@@ -15,8 +17,25 @@ function SideBar({ params }: { params: { id: string, docId: string } }) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-
   const { documentList, getDocuments, createDocument } = useDocumentStore();
+  const [workspaceName, setWorkspaceName] = useState<string>();
+
+  const getName = async () => {
+    if (!params?.id) return;
+
+    try {
+      const workspace = await databases.getDocument(db, workspaceCollection, params.id);
+      setWorkspaceName(workspace.title);
+    } catch (error) {
+      console.error('Error fetching workspace:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (params?.id) {
+      getName();
+    }
+  }, [params?.id]);
 
   useEffect(() => {
     if (params) {
@@ -24,12 +43,12 @@ function SideBar({ params }: { params: { id: string, docId: string } }) {
     }
   }, [params]);
 
-  const handleCreateWorkspace = async() => {
+  const handleCreateWorkspace = async () => {
     setIsLoading(true);
     const responseId = await createDocument(params.id, user?.primaryEmailAddress?.emailAddress!, MAX_SIZE);
-    router.replace(`/workspace/${params.id}/${responseId}`)
+    router.replace(`/workspace/${params.id}/${responseId}`);
     setIsLoading(false);
-  }
+  };
 
   return (
     <div className='h-screen fixed md:w-72 hidden md:block bg-blue-50 p-5 shadow-md'>
@@ -37,13 +56,13 @@ function SideBar({ params }: { params: { id: string, docId: string } }) {
         <Link href="/dashboard">
           <SyncSpaceLogo />
         </Link>
-        <Bell className='h-5 w-5 text-gray-500'/>
+        <Bell className='h-5 w-5 text-gray-500' />
       </div>
-      <hr className='my-5'/>
+      <hr className='my-5' />
 
       <div>
         <div className='flex items-center justify-between'>
-          <h2 className='font-medium'>Workspace Name</h2>
+          <h2 className='font-medium'>{workspaceName ? workspaceName : "Workspace Name"}</h2>
           <Button
             disabled={isLoading}
             onClick={handleCreateWorkspace}
@@ -57,10 +76,10 @@ function SideBar({ params }: { params: { id: string, docId: string } }) {
         </div>
       </div>
 
-      <DocumentList params={params}/>
+      <DocumentList params={params} maxSize={MAX_SIZE}/>
 
       <div className='absolute bottom-10 w-[85%]'>
-        <Progress value={(documentList.length / MAX_SIZE) * 100} className='bg-white'/>
+        <Progress value={(documentList.length / MAX_SIZE) * 100} className='bg-white' />
         <h2 className='text-sm font-light my-2'><strong>{documentList.length}</strong> out of <strong>{MAX_SIZE}</strong> used.</h2>
         <h2 className='text-sm font-light my-2'>Upgrade your plan for more access.</h2>
       </div>

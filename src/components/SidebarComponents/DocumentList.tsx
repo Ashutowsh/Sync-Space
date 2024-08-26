@@ -7,22 +7,19 @@ import { toast } from 'sonner';
 import { useDocumentStore } from '@/store/documentsStore';
 
 interface DocumentListProps {
+  maxSize : number,
   params: {
     id: string;
     docId: string;
   };
 }
 
-function DocumentList({ params }: DocumentListProps) {
+function DocumentList({ params, maxSize }: DocumentListProps) {
   const [editingDocId, setEditingDocId] = useState<string | null>(null);
   const [newTitle, setNewTitle] = useState<string>('');
   const router = useRouter();
 
   const { documentList, deleteDocument, renameDocument, duplicateDocument, getDocuments } = useDocumentStore();
-
-  useEffect(() => {
-    getDocuments(params.id);
-  }, [params.id, getDocuments]);
 
   useEffect(() => {
     getDocuments(params.id);
@@ -40,12 +37,11 @@ function DocumentList({ params }: DocumentListProps) {
     }
   };
 
-  const handleDelete = async(docId : string) => {
+  const handleDelete = async (docId: string) => {
     await deleteDocument(docId);
-    // console.log(id);
-    // router.replace(`/workspace/${params.id}/${id}`)
-  }
-
+    // You might want to update the document list after deletion
+    getDocuments(params.id);
+  };
 
   const shareDocument = async (docId: string) => {
     try {
@@ -63,40 +59,46 @@ function DocumentList({ params }: DocumentListProps) {
       {documentList.map((doc) => (
         <div
           key={doc.$id}
-          className={`mt-3 px-3 py-2 hover:bg-gray-200 rounded-lg cursor-pointer flex justify-between items-center ${
+          className={`mt-3 px-3 py-2 hover:bg-gray-200 rounded-lg cursor-pointer flex items-center ${
             doc.$id === params?.docId ? 'bg-white py-2' : ''
           }`}
           onClick={() => router.push(`/workspace/${params.id}/${doc.$id}`)}
           onDoubleClick={() => handleDoubleClick(doc.$id, doc.title)}
         >
-          <div className='flex gap-2 items-center flex-1'>
-            {!doc?.emoji && <File />}
-            {editingDocId === doc.$id ? (
-              <Input
-                type='text'
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-                onBlur={handleRenameBlur}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleRenameBlur();
-                  }
-                }}
-                className='border rounded px-2 py-1 flex-1'
-                autoFocus
-              />
-            ) : (
-              <h2 className='flex gap-2 flex-1'>
-                {doc?.emoji} {doc.title}
-              </h2>
-            )}
+          <div className='flex items-center flex-1'>
+            <div className='flex items-center gap-2 flex-1'>
+              {!doc?.emoji && <File className='text-2xl'/>}
+              {editingDocId === doc.$id ? (
+                <div className='flex items-center gap-1 flex-1'>
+                  <span className='text-2xl'>{doc.emoji}</span>
+                  <Input
+                    type='text'
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                    onBlur={handleRenameBlur}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleRenameBlur();
+                      }
+                    }}
+                    className='border rounded px-2 py-1 ml-4'
+                    autoFocus
+                  />
+                </div>
+              ) : (
+                <h2 className='flex items-center gap-2 flex-1'>
+                  {doc?.emoji && <span className='text-2xl'>{doc.emoji}</span>}
+                  {doc.title}
+                </h2>
+              )}
+            </div>
           </div>
-          <DocumentsOptions 
-            doc={doc} 
-            deleteDocument={handleDelete} 
-            renameDocument={handleDoubleClick} 
-            shareDocument={shareDocument} 
-            duplicateDocument={() => duplicateDocument(doc, 3)}
+          <DocumentsOptions
+            doc={doc}
+            deleteDocument={handleDelete}
+            renameDocument={handleDoubleClick}
+            shareDocument={shareDocument}
+            duplicateDocument={() => duplicateDocument(doc, maxSize)}
           />
         </div>
       ))}

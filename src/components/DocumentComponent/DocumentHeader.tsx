@@ -7,7 +7,7 @@ function DocumentHeader() {
     <div className='flex justify-between items-center p-3 px-7 shadow'>
         
       <div></div>
-      <OrganizationSwitcher />
+      <OrganizationSwitcher afterCreateOrganizationUrl={'/dashboard'} afterLeaveOrganizationUrl='/dashboard' afterSelectOrganizationUrl={'/dashboard'} afterSelectPersonalUrl={'/dashboard'}/>
 
       <div className='flex gap-2'>
         <Button>Share</Button>
