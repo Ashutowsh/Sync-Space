@@ -87,10 +87,10 @@ function DocumentEditor({ params }: { params: { id: string; docId: string } }) {
         editorRef.current = null;
       }
     };
-  }, [docOutput]);  // Reinitialize the editor when docOutput changes
+  }, [docOutput]);
 
   return (
-    <div className="lg:-ml-40">
+    <div className="lg:-ml-80">
       <div id="editorjs"></div>
     </div>
   );

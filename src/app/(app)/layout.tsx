@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import "@liveblocks/react-ui/styles.css";
 const inter = Inter({ subsets: ["latin"] });
 import { Toaster } from "@/components/ui/sonner"
 export const metadata: Metadata = {

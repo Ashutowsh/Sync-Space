@@ -7,8 +7,6 @@ import { useDocumentStore } from '@/store/documentsStore';
 import { SmilePlus } from 'lucide-react';
 import { Input } from '../ui/input';
 import { useDebounceCallback } from 'usehooks-ts';
-import { databases } from '@/models/server/config';
-import { db, documentCollection, workspaceCollection } from '@/models/name';
 
 function DocumentInfo({ params }: { params: { id: string; docId: string } }) {
   const [coverImage, setCoverImage] = useState<any>(coverPic);
