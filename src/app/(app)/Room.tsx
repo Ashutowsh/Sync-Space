@@ -22,7 +22,7 @@ interface RoomProps {
 export function Room({ children, params }: RoomProps) {
 
   return (
-    <LiveblocksProvider authEndpoint="/api/liveblocks-auth" 
+    <LiveblocksProvider authEndpoint={`/api/liveblocks-auth?roomId=${params?.docId}`} 
       resolveUsers={async({userIds}) => {
         // console.log(userIds)
         let users

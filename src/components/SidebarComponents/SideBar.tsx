@@ -10,6 +10,7 @@ import { useDocumentStore } from '@/store/documentsStore';
 import Link from 'next/link';
 import { databases } from '@/models/server/config';
 import { db, workspaceCollection } from '@/models/name';
+import NotificationBox from '../NotificationsComponents/NotificationBox';
 
 function SideBar({ params }: { params: { id: string, docId: string } }) {
   const { user } = useUser();
@@ -56,7 +57,9 @@ function SideBar({ params }: { params: { id: string, docId: string } }) {
         <Link href="/dashboard">
           <SyncSpaceLogo />
         </Link>
-        <Bell className='h-5 w-5 text-gray-500' />
+        <NotificationBox> 
+          <Bell className='h-5 w-5 text-gray-500' />
+        </NotificationBox>
       </div>
       <hr className='my-5' />
 

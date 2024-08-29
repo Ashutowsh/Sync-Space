@@ -90,7 +90,7 @@ function DocumentEditor({ params }: { params: { id: string; docId: string } }) {
   }, [docOutput]);
 
   return (
-    <div className="lg:-ml-80">
+    <div className="w-[70%]">
       <div id="editorjs"></div>
     </div>
   );
