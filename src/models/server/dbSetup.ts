@@ -3,6 +3,7 @@ import createDocumentCollection from "./document.collection";
 import createDocumentOutputCollection from "./document_output.collection";
 import createWorkspaceCollection from "./workspace.collection";
 import { databases } from "./config";
+import createUserCollection from "./users.collections";
 
 export default async function getOrCreateDB(){
   try {
@@ -17,6 +18,7 @@ export default async function getOrCreateDB(){
         createWorkspaceCollection(),
         createDocumentCollection(),
         createDocumentOutputCollection(),
+        createUserCollection()
       ])
       console.log("Collection created")
       console.log("Database connected")

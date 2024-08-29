@@ -13,7 +13,7 @@ import { db, workspaceCollection } from '@/models/name';
 
 function SideBar({ params }: { params: { id: string, docId: string } }) {
   const { user } = useUser();
-  const MAX_SIZE = 8;
+  const MAX_SIZE = Number(process.env.NEXT_PUBLIC_MAX_FILE) ;
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 

@@ -8,9 +8,9 @@ import Image from 'next/image';
 import { Button } from "@/components/ui/button";
 import NavBar from '@/components/Header/NavBar';
 import WorkSpaceList from '@/components/WorkSpaceComponents/WorkSpaceList';
-import { Query, Models } from 'node-appwrite';
+import { Query, Models, ID } from 'node-appwrite';
 import { databases } from '@/models/server/config';
-import { db, workspaceCollection } from '@/models/name';
+import { db, usersCollection, workspaceCollection } from '@/models/name';
 import Link from 'next/link';
 
 const Dashboard: React.FC = () => {
@@ -18,6 +18,22 @@ const Dashboard: React.FC = () => {
   const { user, isLoaded, isSignedIn } = useUser();
   const [workspacesResponse, setWorkspacesResponse] = useState<Models.DocumentList<Models.Document> | null>(null);
   const [isFetching, setIsFetching] = useState(false);
+
+  useEffect(() => {
+    user && saveUser();
+  }, [user])
+
+  const saveUser = async() => {
+    try {
+      await databases.createDocument(db, usersCollection, user?.firstName!, {
+        name : user?.fullName,
+        email : user?.primaryEmailAddress?.emailAddress,
+        avatar : user?.imageUrl
+      })
+    } catch (error) {
+      console.log("Error in saving the user.", error);
+    }
+  }
 
   const getWorkspaces = async (id: string) => {
     try {
