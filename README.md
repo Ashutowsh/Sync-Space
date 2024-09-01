@@ -101,8 +101,8 @@ Sync Space is built using a modern and robust tech stack, ensuring reliability, 
 
 Upcoming enhancements include:
 
-- **Stripe APi Integration** : Charging Users for greater Access.
-- **Files Storage **: users could be able to store files and images related to each document and workspaces.
+- **Stripe API Integration** : Charging Users for greater access and usage.
+- **Files Storage**: users could be able to store files and images related to each document and workspaces.
 
 
 Thank you for using Sync Space! We hope it enhances your team's productivity and creativity. If you have any questions or feedback, please don't hesitate to reach out.
