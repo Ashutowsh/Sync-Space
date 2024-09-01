@@ -41,7 +41,7 @@ Sync Space introduces the concept of workspaces within each organization, allowi
 - **Framework**: Next.js, TypeScript
 - **State Management**: Zustand
 
-### 3. Beautiful Document Editors
+### 3. Beautiful Document Editor
 
 At the heart of Sync Space is the document editor, powered by **Editor.js**, which offers a modern and intuitive interface for content creation.
 
@@ -68,7 +68,7 @@ Sync Space integrates AI capabilities to provide users with real-time insights a
 Communication is key to collaboration, and Sync Space ensures that teams stay connected through document-specific notifications and a robust commenting system.
 
 - **Real-Time Notifications**: Receive real-time updates whenever a document is edited or commented on.
-- **Threaded Comments**: Engage in discussions within the document itself, with comments that are directly linked to specific sections of the text.
+- **Threaded Comments**: Engage in discussions within the document itself.
 - **Live Collaboration**: Thanks to **LiveBlocks**, users can see who is viewing or editing a document in real time, fostering a sense of teamwork.
 
 **Tech Stack**:
