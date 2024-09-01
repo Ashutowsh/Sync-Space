@@ -92,7 +92,7 @@ Sync Space is built using a modern and robust tech stack, ensuring reliability, 
 
 - **Authentication**: Clerk
 - **Notifications and Comments**: LiveBlocks
-- **AI Integration - Google Gemini API
+- **AI Integration** - Google Gemini API
 - **Text Editor**: Editor.js
 - **State Management**: Zustand
 - **Framework**: Next.js, ShadCN, TypeScript
