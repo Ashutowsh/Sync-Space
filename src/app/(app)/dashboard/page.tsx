@@ -25,7 +25,7 @@ const Dashboard: React.FC = () => {
 
   const saveUser = async() => {
     try {
-      await databases.createDocument(db, usersCollection, user?.firstName!, {
+      await databases.createDocument(db, "66ccab89002a9d3dac41", user?.firstName!, {
         name : user?.fullName,
         email : user?.primaryEmailAddress?.emailAddress,
         avatar : user?.imageUrl

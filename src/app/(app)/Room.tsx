@@ -6,13 +6,12 @@ import {
   RoomProvider,
   ClientSideSuspense,
 } from "@liveblocks/react/suspense";
-import env from "@/env";
 import { databases } from "@/models/server/config";
-import { db, usersCollection } from "@/models/name";
+import { db } from "@/models/name";  // Assuming usersCollection is part of your db
 import { Query } from "node-appwrite";
 
 interface RoomProps {
-  children : ReactNode,
+  children: ReactNode;
   params: {
     id: string;
     docId: string;
@@ -20,48 +19,41 @@ interface RoomProps {
 }
 
 export function Room({ children, params }: RoomProps) {
-
   return (
-    <LiveblocksProvider authEndpoint={`/api/liveblocks-auth?roomId=${params?.docId}`} 
-      resolveUsers={async({userIds}) => {
-        // console.log(userIds)
-        let users
+    <LiveblocksProvider
+      authEndpoint={`/api/liveblocks-auth?roomId=${params?.docId}`}
+      resolveUsers={async ({ userIds }) => {
         try {
-          users = await databases.listDocuments(db, "66ccab89002a9d3dac41", [
-            Query.equal("email", userIds)
-          ])
-          
-          // console.log(users)
+          const response = await databases.listDocuments(db, "66ccab89002a9d3dac41", [
+            Query.equal("email", userIds),
+          ]);
+          return response?.documents;
         } catch (error) {
-          console.log("Error in fetching users : ", error)
+          console.error("Error in fetching users: ", error);
+          return [];
         }
-        
-        return users?.documents
-      }}       resolveMentionSuggestions={async ({ text, roomId }) => {
-        // Fetch all users from your back end
-        let users
+      }}
+      resolveMentionSuggestions={async ({ text }) => {
         try {
-          users = await databases.listDocuments(db, "66ccab89002a9d3dac41", [
-            Query.isNotNull("email")
-          ])
-          
-          // console.log(users)
-        } catch (error) {
-          console.log("Error in fetching users : ", error)
-        }
-        let usersList = users?.documents;
-        // console.log(usersList)
-        // If there's a query, filter for the relevant users
-        if (text) {
-          // Filter any way you'd like, e.g. checking if the name matches
-          usersList = usersList?.filter((user) => user.name.includes(text));
-        }
+          let users = await databases.listDocuments(db, "66ccab89002a9d3dac41", [
+            Query.isNotNull("email"),
+          ]);
 
-        console.log("UsersList : ", usersList)
-    
-        // Return the filtered `userIds`
-        return usersList?.map((user) => user.email)!;
-      }}>
+          let usersList = users?.documents || [];
+
+          if (text) {
+            usersList = usersList.filter((user) =>
+              user.name.toLowerCase().includes(text.toLowerCase())
+            );
+          }
+
+          return usersList.map((user) => user.email);
+        } catch (error) {
+          console.error("Error in fetching mention suggestions: ", error);
+          return [];
+        }
+      }}
+    >
       <RoomProvider id={params?.docId}>
         <ClientSideSuspense fallback={<div>Loading…</div>}>
           {children}

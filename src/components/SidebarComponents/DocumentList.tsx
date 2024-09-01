@@ -39,8 +39,9 @@ function DocumentList({ params, maxSize }: DocumentListProps) {
 
   const handleDelete = async (docId: string) => {
     await deleteDocument(docId);
-    // You might want to update the document list after deletion
-    getDocuments(params.id);
+    // await getDocuments(params.id);
+    console.log(documentList)
+    // router.replace(`/workspace/${params.id}/${documentList[0].$id}`)
   };
 
   const shareDocument = async (docId: string) => {

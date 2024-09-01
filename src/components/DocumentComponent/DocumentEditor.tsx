@@ -9,6 +9,7 @@ import Warning from '@editorjs/warning';
 import Alert from 'editorjs-alert';
 import { databases } from "@/models/server/config";
 import { db, documentOutputCollection } from "@/models/name";
+import AiComponent from "../AI/AiComponent";
 
 function DocumentEditor({ params }: { params: { id: string; docId: string } }) {
   const editorRef = useRef<EditorJS | null>(null);
@@ -58,7 +59,7 @@ function DocumentEditor({ params }: { params: { id: string; docId: string } }) {
           },
         },
         data: docOutput || {},  // Load the fetched data into the editor
-        onChange: async (api, event) => {
+        onChange: async () => {
           try {
             const savedData = await editor.save();
             console.log("Saved data:", savedData);
@@ -89,9 +90,30 @@ function DocumentEditor({ params }: { params: { id: string; docId: string } }) {
     };
   }, [docOutput]);
 
+  const handleAiOutput = async (output: any) => {
+    if (editorRef.current) {
+      editorRef.current.render(output);
+
+      try {
+        const savedData = await editorRef.current.save();
+        const docId = params.docId;
+
+        await databases.updateDocument(db, documentOutputCollection, docId, {
+          output: JSON.stringify(savedData),
+        });
+        console.log("Document updated with AI output.");
+      } catch (error) {
+        console.error("Failed to update document with AI output:", error);
+      }
+    }
+  };
+
   return (
     <div className="w-[70%]">
       <div id="editorjs"></div>
+      <div className="fixed bottom-10 md:ml-80 left-0 z-10">
+        <AiComponent aiOutput={handleAiOutput} />
+      </div>
     </div>
   );
 }

@@ -16,7 +16,9 @@
     "@editorjs/header": "^2.8.7",
     "@editorjs/list": "^1.10.0",
     "@editorjs/warning": "^1.4.0",
+    "@google/generative-ai": "^0.17.1",
     "@liveblocks/client": "^2.6.0",
+    "@liveblocks/node": "^2.6.0",
     "@liveblocks/react": "^2.6.0",
     "@liveblocks/react-ui": "^2.6.0",
     "@radix-ui/react-checkbox": "^1.1.1",
@@ -26,6 +28,7 @@
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@tanstack/react-table": "^8.20.1",
+    "ai": "^3.3.21",
     "appwrite": "^15.0.0",
     "axios": "^1.7.5",
     "class-variance-authority": "^0.7.0",
@@ -45,6 +48,7 @@
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "usehooks-ts": "^3.1.0",
+    "zod": "^3.23.8",
     "zustand": "^4.5.5"
   },
   "devDependencies": {
