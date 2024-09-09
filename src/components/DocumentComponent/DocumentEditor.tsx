@@ -58,7 +58,7 @@ function DocumentEditor({ params }: { params: { id: string; docId: string } }) {
             },
           },
         },
-        data: docOutput || {},  // Load the fetched data into the editor
+        data: docOutput || {}, 
         onChange: async () => {
           try {
             const savedData = await editor.save();

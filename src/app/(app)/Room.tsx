@@ -18,6 +18,22 @@ interface RoomProps {
   };
 }
 
+const Loader: React.FC = () => {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen">
+      <div className="relative flex items-center justify-center">
+        <div className="w-16 h-16 border-8 border-t-8 border-blue-500 border-solid rounded-full animate-spin"></div>
+      </div>
+      <div className="mt-4 text-xl font-semibold text-blue-500">Loading...</div>
+      <p className="mt-2 text-lg text-gray-600">Please wait while we setup the room.</p>
+      <p className="mt-2 text-lg text-gray-600">The loading will happen on every operation. I am working on this Sorry for the inconvinience. Application will improve day by day.</p>
+    </div>
+  );
+};
+
+export default Loader;
+
+
 export function Room({ children, params }: RoomProps) {
   return (
     <LiveblocksProvider
@@ -55,7 +71,7 @@ export function Room({ children, params }: RoomProps) {
       }}
     >
       <RoomProvider id={params?.docId}>
-        <ClientSideSuspense fallback={<div>Loading…</div>}>
+        <ClientSideSuspense fallback={<Loader />}>
           {children}
         </ClientSideSuspense>
       </RoomProvider>

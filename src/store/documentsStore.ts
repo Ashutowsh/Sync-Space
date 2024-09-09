@@ -6,7 +6,6 @@ import { toast } from 'sonner';
 
 interface DocumentStoreState {
   documentList: Models.Document[];
-  isLoading: boolean;
   getDocuments: (workspaceId: string) => Promise<void>;
   deleteDocument: (docId: string) => Promise<void>;
   renameDocument: (docId: string, newName: string) => Promise<void>;
@@ -17,9 +16,8 @@ interface DocumentStoreState {
 
 export const useDocumentStore = create<DocumentStoreState>((set, get) => ({
   documentList: [],
-  isLoading: false,
+
   getDocuments: async (workspaceId) => {
-    set({ isLoading: true });
     try {
       const documents = await databases.listDocuments(db, documentCollection, [
         Query.orderDesc('$createdAt'),
@@ -29,8 +27,6 @@ export const useDocumentStore = create<DocumentStoreState>((set, get) => ({
       console.log('Documents fetched:', documents.documents);
     } catch (error) {
       console.error('Error fetching documents:', error);
-    } finally {
-      set({ isLoading: false });
     }
   },
 
@@ -52,7 +48,6 @@ export const useDocumentStore = create<DocumentStoreState>((set, get) => ({
   renameDocument: async (docId, newName) => {
     try {
       await databases.updateDocument(db, documentCollection, docId, { title: newName });
-      // toast('Document renamed successfully.');
       set((state) => ({
         documentList: state.documentList.map((doc) =>
           doc.$id === docId ? { ...doc, title: newName } : doc

@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { useDocumentStore } from '@/store/documentsStore';
 
 interface DocumentListProps {
-  maxSize : number,
+  maxSize: number;
   params: {
     id: string;
     docId: string;
@@ -25,6 +25,10 @@ function DocumentList({ params, maxSize }: DocumentListProps) {
     getDocuments(params.id);
   }, [params.id, getDocuments]);
 
+  useEffect(() => {
+    console.log('Document list updated:', documentList);
+  }, [documentList]);
+
   const handleDoubleClick = (docId: string, currentTitle: string) => {
     setEditingDocId(docId);
     setNewTitle(currentTitle);
@@ -39,9 +43,13 @@ function DocumentList({ params, maxSize }: DocumentListProps) {
 
   const handleDelete = async (docId: string) => {
     await deleteDocument(docId);
-    // await getDocuments(params.id);
-    console.log(documentList)
-    // router.replace(`/workspace/${params.id}/${documentList[0].$id}`)
+    // Ensure document list state is reflected
+    const updatedDocumentList = useDocumentStore.getState().documentList;
+    if (updatedDocumentList.length > 0) {
+      router.replace(`/workspace/${params.id}/${updatedDocumentList[0].$id}`);
+    } else {
+      router.push(`/workspace/${params.id}`);
+    }
   };
 
   const shareDocument = async (docId: string) => {
@@ -68,7 +76,7 @@ function DocumentList({ params, maxSize }: DocumentListProps) {
         >
           <div className='flex items-center flex-1'>
             <div className='flex items-center gap-2 flex-1'>
-              {!doc?.emoji && <File className='text-2xl'/>}
+              {!doc?.emoji && <File className='text-2xl' />}
               {editingDocId === doc.$id ? (
                 <div className='flex items-center gap-1 flex-1'>
                   <span className='text-2xl'>{doc.emoji}</span>

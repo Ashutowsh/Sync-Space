@@ -25,14 +25,14 @@ function AiComponent({ aiOutput }: { aiOutput: (output: string) => void }) {
     console.log("Prompt : ", prompt);
     try {
       const result = await chatSession.sendMessage(prompt);
-      const responseText = await result.response.text(); // Corrected
+      const responseText = await result.response.text();
       console.log(responseText);
       aiOutput(JSON.parse(responseText))
       setLoading(false);
       setOpen(false);
     } catch (error) {
       console.log("Some Error Occurred while generating AI template: ", error)
-      setLoading(false); // Make sure to stop loading on error too
+      setLoading(false);
     }
   }
 
