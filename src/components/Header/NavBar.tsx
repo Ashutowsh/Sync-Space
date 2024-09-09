@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 function NavBar() {
   const {orgId} = useAuth()
-  console.log(orgId)
+  // console.log(orgId)
   return (
     <div className="w-full px-32 py-4 font-medium flex items-center justify-between text-xl shadow-sm">
       <Link href="/dashboard">

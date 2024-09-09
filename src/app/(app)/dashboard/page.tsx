@@ -12,6 +12,7 @@ import { Query, Models, ID } from 'node-appwrite';
 import { databases } from '@/models/server/config';
 import { db, workspaceCollection } from '@/models/name';
 import Link from 'next/link';
+import env from '@/env';
 
 const Dashboard: React.FC = () => {
   const { orgId } = useAuth();
@@ -25,14 +26,14 @@ const Dashboard: React.FC = () => {
 
   const saveUser = async() => {
     try {
-      const existingUser = await databases.listDocuments(db, "66ccab89002a9d3dac41", [
+      const existingUser = await databases.listDocuments(db, env.appwrite.userCollectionId, [
         Query.equal("name", user?.username!)
       ]);
       if(existingUser.total >= 1){
         return;
       }
       // console.log(user?.username)
-      await databases.createDocument(db, "66ccab89002a9d3dac41", user?.username!, {
+      await databases.createDocument(db, env.appwrite.userCollectionId , user?.username!, {
         name : user?.username,
         email : user?.primaryEmailAddress?.emailAddress,
         avatar : user?.imageUrl

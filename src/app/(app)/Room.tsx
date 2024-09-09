@@ -9,6 +9,7 @@ import {
 import { databases } from "@/models/server/config";
 import { db } from "@/models/name";  // Assuming usersCollection is part of your db
 import { Query } from "node-appwrite";
+import env from "@/env";
 
 interface RoomProps {
   children: ReactNode;
@@ -40,7 +41,7 @@ export function Room({ children, params }: RoomProps) {
       authEndpoint={`/api/liveblocks-auth?roomId=${params?.docId}`}
       resolveUsers={async ({ userIds }) => {
         try {
-          const response = await databases.listDocuments(db, "66ccab89002a9d3dac41", [
+          const response = await databases.listDocuments(db, env.appwrite.userCollectionId, [
             Query.equal("email", userIds),
           ]);
           return response?.documents;
@@ -51,7 +52,7 @@ export function Room({ children, params }: RoomProps) {
       }}
       resolveMentionSuggestions={async ({ text }) => {
         try {
-          let users = await databases.listDocuments(db, "66ccab89002a9d3dac41", [
+          let users = await databases.listDocuments(db, env.appwrite.userCollectionId, [
             Query.isNotNull("email"),
           ]);
 
