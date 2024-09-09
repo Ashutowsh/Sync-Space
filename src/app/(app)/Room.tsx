@@ -40,7 +40,7 @@ export function Room({ children, params }: RoomProps) {
           ]);
 
           let usersList = users?.documents || [];
-
+          console.log(usersList)
           if (text) {
             usersList = usersList.filter((user) =>
               user.name.toLowerCase().includes(text.toLowerCase())

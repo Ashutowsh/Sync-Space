@@ -12,9 +12,11 @@ import getOrCreateWorkSpaceStorage from './models/server/workspace_storage';
 
 // Create route matcher for protected routes
 const isProtectedRoute = createRouteMatcher([
-  '/',
   '/dashboard(.*)',
+  '/workspace/(.*)',
+  '/create-workspace',
 ]);
+
 
 // Middleware function
 export async function middleware(request: NextRequest, event: NextFetchEvent) {
@@ -25,10 +27,9 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     getOrCreateWorkSpaceStorage()
   ]);
 
-  // Handle Clerk middleware logic
   const response = await clerkMiddleware((auth, req) => {
     if (isProtectedRoute(req)) auth().protect();
-    return NextResponse.next(); // Return a NextResponse to continue
+    return NextResponse.next();
   })(request, event);
 
   return response;

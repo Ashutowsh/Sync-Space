@@ -10,7 +10,7 @@ import NavBar from '@/components/Header/NavBar';
 import WorkSpaceList from '@/components/WorkSpaceComponents/WorkSpaceList';
 import { Query, Models, ID } from 'node-appwrite';
 import { databases } from '@/models/server/config';
-import { db, usersCollection, workspaceCollection } from '@/models/name';
+import { db, workspaceCollection } from '@/models/name';
 import Link from 'next/link';
 
 const Dashboard: React.FC = () => {
@@ -25,11 +25,19 @@ const Dashboard: React.FC = () => {
 
   const saveUser = async() => {
     try {
-      await databases.createDocument(db, "66ccab89002a9d3dac41", user?.firstName!, {
-        name : user?.fullName,
+      const existingUser = await databases.listDocuments(db, "66ccab89002a9d3dac41", [
+        Query.equal("name", user?.username!)
+      ]);
+      if(existingUser.total >= 1){
+        return;
+      }
+      // console.log(user?.username)
+      await databases.createDocument(db, "66ccab89002a9d3dac41", user?.username!, {
+        name : user?.username,
         email : user?.primaryEmailAddress?.emailAddress,
         avatar : user?.imageUrl
       })
+      console.log("User got saved into the system.")
     } catch (error) {
       console.log("Error in saving the user.", error);
     }

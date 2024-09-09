@@ -1,7 +1,8 @@
-"use client"
 import SyncSpaceLogo from '@/components/Header/Logo';
 import { Button } from '@/components/ui/button';
 import React from 'react';
+import { auth } from '@clerk/nextjs/server'
+import Link from 'next/link';
 
 interface FeatureCardProps {
   title: string;
@@ -18,14 +19,21 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ title, description }) => {
 };
 
 const HomePage: React.FC = () => {
-  return (
+
+  const { userId }: { userId: string | null } = auth()
+
+  return (  
     <div className="bg-gray-100">
       <nav className="bg-white shadow-lg pt-3">
         <div className="container mx-auto px-4 py-2 flex justify-between items-center">
-          <SyncSpaceLogo />
-          <Button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-            Get Started
-          </Button>
+          <Link href={userId?"/dashboard" : "/"}>
+            <SyncSpaceLogo />
+          </Link>
+          <Link href={userId?"/dashboard" : "/sign-in"}> 
+            <Button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+              {userId?"Dashboard" : "Get Started"}
+            </Button>
+          </Link>
         </div>
       </nav>
 
@@ -36,9 +44,11 @@ const HomePage: React.FC = () => {
         <p className="text-gray-700 mt-4 text-lg">
           Your one-stop solution for organizing, creating, and sharing ideas and data with your team.
         </p>
-        <Button className="mt-8 bg-blue-500 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-600">
-          Get Started
-        </Button>
+        <Link href={userId?"/dashboard" : "/sign-in"}>
+          <Button className="mt-8 bg-blue-500 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-600">
+          {userId?"Go to Dashboard" : "Get Started"}
+          </Button>
+        </Link>
       </section>
 
       <section className="container mx-auto px-4 py-16">

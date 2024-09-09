@@ -14,6 +14,7 @@ import { workspaceCollection, db, documentCollection, documentOutputCollection }
 import { useAuth, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import NavBar from "@/components/Header/NavBar";
+import { toast } from "sonner";
 
 
 function Page() {
@@ -36,9 +37,12 @@ function Page() {
 
   const handleCreateWorkspace = async () => {
     if (!name) return;
+    if(coverImage === coverPic) {
+      toast("Select a cover image.");
+      return;
+    }
     setIsLoading(true);
     try {
-
       const response = await databases.createDocument(db, workspaceCollection, ID.unique(), {
         title: name,
         createdBy: user?.primaryEmailAddress?.emailAddress,
