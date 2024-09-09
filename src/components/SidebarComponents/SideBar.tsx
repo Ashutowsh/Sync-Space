@@ -11,10 +11,11 @@ import Link from 'next/link';
 import { databases } from '@/models/server/config';
 import { db, workspaceCollection } from '@/models/name';
 import NotificationBox from '../NotificationsComponents/NotificationBox';
+import env from '@/env';
 
 function SideBar({ params }: { params: { id: string, docId: string } }) {
   const { user } = useUser();
-  const MAX_SIZE = Number(process.env.NEXT_PUBLIC_MAX_FILE) ;
+  const MAX_SIZE = env.limit.docs ;
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 

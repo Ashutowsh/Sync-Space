@@ -13,6 +13,10 @@ const env = {
 
     ai : {
         apiKey : String(process.env.NEXT_PUBLIC_GEMINI_API_KEY)
+    },
+
+    limit : {
+        docs : Number(process.env.NEXT_PUBLIC_MAX_FILE)
     }
 }
 
