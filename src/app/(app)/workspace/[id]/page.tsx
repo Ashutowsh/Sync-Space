@@ -8,11 +8,13 @@ import { ID, Models, Query } from 'node-appwrite';
 import { WorkspaceDocumentList } from '@/components/WorkSpaceComponents/WorkspaceDocumentList';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
-import { FaPlus } from 'react-icons/fa'; // Ensure react-icons is installed
+import { FaPlus } from 'react-icons/fa';
 import { Progress } from '@/components/ui/progress';
 import env from '@/env';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
-const MAX_SIZE = env.limit.docs
+const MAX_SIZE = env.limit.docs;
 
 const Page = ({ params }: { params: { id: string, docId: string } }) => {
   const workspaceId = params.id!;
@@ -50,7 +52,13 @@ const Page = ({ params }: { params: { id: string, docId: string } }) => {
 
   const handleCreateDocument = async () => {
     if (documentList.length >= MAX_SIZE) {
-      alert("Document limit reached. Upgrade your plan for more access.");
+      toast('Upgrade your plan.', {
+        description: 'You have reached your free limits.',
+        action: {
+          label: 'Upgrade',
+          onClick: () => console.log('Upgrade clicked'),
+        },
+      });
       return;
     }
 
@@ -71,7 +79,6 @@ const Page = ({ params }: { params: { id: string, docId: string } }) => {
 
       console.log("Untitled Doc Output created.", responseDocumentOutput);
       
-      // Fetch documents again to update the list
       getDocuments(workspaceId);
     } catch (error: any) {
       console.log("Error in creating document: ", error);
@@ -84,8 +91,6 @@ const Page = ({ params }: { params: { id: string, docId: string } }) => {
     getDocuments(workspaceId);
     getWorkspaceName(workspaceId);
   }, [workspaceId, getDocuments, getWorkspaceName]);
-
-  const progress = (documentList.length / MAX_SIZE) * 100;
 
   return (
     <div>
@@ -107,19 +112,19 @@ const Page = ({ params }: { params: { id: string, docId: string } }) => {
             )}
           </>
         )}
-        <button 
+        <Button 
           onClick={handleCreateDocument} 
-          className='absolute bottom-10 right-10 p-3 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600'
+          className='absolute bottom-16 right-10 p-3 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600'
         >
           <FaPlus size={24} />
-        </button>
-        <div className='absolute bottom-10 right-10 w-[85%]'>
-          <Progress value={progress} className='bg-white' />
-          <h2 className='text-sm font-light my-2 text-center'>
-            <strong>{documentList.length}</strong> out of <strong>{MAX_SIZE}</strong> used.
-          </h2>
-          <h2 className='text-sm font-light my-2 text-center'>Upgrade your plan for more access.</h2>
-        </div>
+        </Button>
+      </div>
+      <div className='absolute bottom-10 left-1/2 transform -translate-x-1/2 w-[85%]'>
+        <Progress value={(documentList.length / MAX_SIZE) * 100} className='bg-slate-400' />
+        <h2 className='text-sm font-light my-2 text-center'>
+          <strong>{documentList.length}</strong> out of <strong>{MAX_SIZE}</strong> used.
+        </h2>
+        <h2 className='text-sm font-light my-2 text-center'>Upgrade your plan for more access.</h2>
       </div>
     </div>
   );
