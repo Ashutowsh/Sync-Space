@@ -55,7 +55,7 @@ function AiComponent({ aiOutput }: { aiOutput: (output: string) => void }) {
                     {loading ? <Loader2Icon className='animate-spin' /> : "Generate"}
                   </Button> */}
                   <Button variant="outline" disabled={!input || loading}>
-                    {loading ? <Loader2Icon className='animate-spin' /> : "Generate"}
+                    {loading ? <Loader2Icon className='animate-spin' /> : "Diabled (Pricing issue)"}
                   </Button>
                   <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
                 </div>
