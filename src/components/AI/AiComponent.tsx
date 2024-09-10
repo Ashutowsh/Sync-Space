@@ -51,7 +51,10 @@ function AiComponent({ aiOutput }: { aiOutput: (output: string) => void }) {
                 <div className='mt-5'>Use the field below to input text, and the AI will generate a template for you.</div>
                 <Input placeholder='Enter the text' onChange={(e: any) => setInput(e.target.value)} />
                 <div className='mt-5 flex gap-5 justify-end'>
-                  <Button variant="outline" disabled={!input || loading} onClick={generatetemplate}>
+                  {/* <Button variant="outline" disabled={!input || loading} onClick={generatetemplate}>
+                    {loading ? <Loader2Icon className='animate-spin' /> : "Generate"}
+                  </Button> */}
+                  <Button variant="outline" disabled={!input || loading}>
                     {loading ? <Loader2Icon className='animate-spin' /> : "Generate"}
                   </Button>
                   <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
